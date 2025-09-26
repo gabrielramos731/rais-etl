@@ -1,6 +1,7 @@
 import os
-from utils.file_normalizer import normaliza_tipos
-from config.config_bronze import RAW_PATH_ESTB, OUT_PATH_ESTB_BRONZE
+import time
+from bronze_layer.utils.file_normalizer import normaliza_tipos
+from bronze_layer.config.config_bronze import RAW_PATH_ESTB, OUT_PATH_ESTB_BRONZE
 
 def run_bronze_layer():
     file_list = os.listdir(RAW_PATH_ESTB)
@@ -9,4 +10,8 @@ def run_bronze_layer():
         normaliza_tipos(file_name, RAW_PATH_ESTB, OUT_PATH_ESTB_BRONZE)
 
 if __name__ == "__main__":
+    start_time = time.time()
     run_bronze_layer()
+    end_time = time.time()
+    elapsed = end_time - start_time
+    print(f"Tempo total de execução: {elapsed:.2f} segundos")
