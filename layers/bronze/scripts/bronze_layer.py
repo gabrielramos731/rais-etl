@@ -1,7 +1,7 @@
 import os
 import time
-from bronze_layer.utils.file_normalizer import normaliza_tipos
-from bronze_layer.config.config_bronze import RAW_PATH_ESTB, OUT_PATH_ESTB_BRONZE
+from layers.bronze.utils.file_normalizer import normaliza_tipos
+from layers.bronze.config.config_bronze import RAW_PATH_ESTB, OUT_PATH_ESTB_BRONZE
 
 def run_bronze_layer():
     file_list = os.listdir(RAW_PATH_ESTB)
