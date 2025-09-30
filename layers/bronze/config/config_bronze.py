@@ -1,7 +1,9 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv()
 
 RAW_PATH_ESTB = os.getenv("RAW_PATH_ESTB")
-OUT_PATH_ESTB_BRONZE = os.path.join(os.path.dirname(__file__), '..', 'data', 'conformed', 'estabelecimentos')
+BASE_DIR = Path(__file__).resolve().parents[1]
+OUT_PATH_ESTB_BRONZE = BASE_DIR / 'data' / 'conformed' / 'estabelecimentos'

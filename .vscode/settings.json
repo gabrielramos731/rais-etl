@@ -1,0 +1,6 @@
+{
+  "python.analysis.extraPaths": ["./"],
+  "python.terminal.cwd": "${workspaceFolder}",
+  "python.testing.cwd": "${workspaceFolder}",
+  "python.envFile": "${workspaceFolder}/.env"  
+}

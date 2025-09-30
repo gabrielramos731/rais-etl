@@ -22,4 +22,4 @@ def normaliza_tipos(file_name, raw_path, out_path):
     
     out_file = os.path.join(out_path, file_name.replace(ext, 'parquet'))
     print(out_file)
-    df.to_parquet(out_file, engine='fastparquet')
+    df.to_parquet(out_file, engine='fastparquet', index=False)

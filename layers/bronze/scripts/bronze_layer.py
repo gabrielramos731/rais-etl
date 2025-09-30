@@ -1,3 +1,4 @@
+#%%
 import os
 import time
 from layers.bronze.utils.file_normalizer import normaliza_tipos
