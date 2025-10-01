@@ -16,6 +16,9 @@ def processa_dados(file_name, raw_path, out_path) -> pd.DataFrame:
         df = transforma_txt(file_path)
     elif num_cols == 3: # para csv
         df = transforma_csv(file_path)
+    
+    # chamar aqui o link fato -> dimensão
+    # lonk_fato_dim()
     df.to_parquet(os.path.join(out_path, file_name), index=False, engine='fastparquet')
 
 def transforma_txt(path) -> pd.DataFrame:
