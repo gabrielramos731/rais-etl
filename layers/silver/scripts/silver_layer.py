@@ -6,7 +6,7 @@ from layers.silver.utils.process_data import processa_dados
 from layers.silver.utils.process_dimensions import cria_dimensoes
 from layers.silver.config.config_silver import PATH_ESTB_BRONZE, OUT_PATH_ESTB_SILVER
 
-def run_silver_layer():
+def run_silver_layer() -> None:
     file_list = os.listdir(PATH_ESTB_BRONZE)
     cria_dimensoes()
     for file_name in file_list:
