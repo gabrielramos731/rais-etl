@@ -20,6 +20,3 @@ if __name__ == "__main__":
     elapsed = end_time - start_time
     print(f"Tempo total de execução: {elapsed:.2f} segundos")
 
-# %%
-print(pd.read_parquet('/home/gabriel/dev/ndti/rais_2/layers/silver/data/estabelecimentos/ESTB2010.parquet'))
-print(pd.read_parquet('/home/gabriel/dev/ndti/rais_2/layers/silver/data/estabelecimentos/ESTB2011.parquet'))

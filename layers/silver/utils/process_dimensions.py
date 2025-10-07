@@ -12,10 +12,9 @@ def cria_dim_cnae():
     
     dim = dim.drop_duplicates(subset='classe')
     dim['secao'] = dim['descricao_secao'].astype('category').cat.codes + 1
+    dim['classe'] = dim['classe'].astype(str).str.zfill(5)
+    dim['divisao'] = dim['descricao_divisao'].astype('object')
 
     dim.to_parquet(os.path.join(config_silver.DIM_OUT_PATH, 'dim_cnae.parquet'), index=False)
 
 cria_dim_cnae()
-#%%
-
-print(pd.read_parquet(os.path.join(config_silver.DIM_OUT_PATH, 'dim_cnae.parquet')))

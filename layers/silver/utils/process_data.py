@@ -26,14 +26,14 @@ def transforma_txt(path) -> pd.DataFrame:
 
     df = pd.read_parquet(path)
     df.rename(columns={
-        'CNAE 2.0 Classe': 'cnae',
+        'CNAE 2.0 Classe': 'classe',
         'Município': 'id_municipio'
     }, inplace=True)
 
     ano = int(str.split(path, '.')[0][-4:])
     df['ano'] = ano
     df['id_municipio'] = df['id_municipio'].astype(str)
-    df['cnae'] = df['cnae'].astype(str).str.zfill(5)
+    df['classe'] = df['classe'].astype(str).str.zfill(5)
     
     return df
 
@@ -42,10 +42,10 @@ def transforma_csv(path) -> pd.DataFrame:
 
     df = pd.read_parquet(path)
     df.rename(columns={
-        'cnae_2': 'cnae',
+        'cnae_2': 'classe',
     }, inplace=True)
 
-    df['cnae'] = df['cnae'].astype(str).str.zfill(5)
+    df['classe'] = df['classe'].astype(str).str.zfill(5)
     df['id_municipio'] = df['id_municipio'].astype(str).str[:6]
 
     return df
