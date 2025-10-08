@@ -32,7 +32,7 @@ def transforma_txt(path) -> pd.DataFrame:
 
     ano = int(str.split(path, '.')[0][-4:])
     df['ano'] = ano
-    df['id_municipio'] = df['id_municipio'].astype(str)
+    df['id_municipio'] = df['id_municipio'].astype('str')
     df['classe'] = df['classe'].astype(str).str.zfill(5)
     
     return df
@@ -46,6 +46,6 @@ def transforma_csv(path) -> pd.DataFrame:
     }, inplace=True)
 
     df['classe'] = df['classe'].astype(str).str.zfill(5)
-    df['id_municipio'] = df['id_municipio'].astype(str).str[:6]
+    df['id_municipio'] = df['id_municipio'].astype('str').str[:6]
 
     return df

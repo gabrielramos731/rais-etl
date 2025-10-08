@@ -20,3 +20,5 @@ if __name__ == "__main__":
     elapsed = end_time - start_time
     print(f"Tempo total de execução: {elapsed:.2f} segundos")
 
+
+# %%
