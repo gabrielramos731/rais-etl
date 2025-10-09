@@ -7,6 +7,7 @@ def cria_dimensoes() -> None:
     '''Executa as chamadas para criação das dimensões'''
     cria_dim_cnae()
     cria_dim_ano()
+    altera_tipos_regiao()
 
 def cria_dim_cnae() -> None:
     '''Cria a dimensão cnae a partir do arquivo csv'''
@@ -34,6 +35,7 @@ def altera_tipos_regiao() -> None:
         'dim_microrregiao': os.path.join(config_silver.DIM_OUT_PATH, 'dim_microrregiao.parquet'),
         'dim_mesorregiao': os.path.join(config_silver.DIM_OUT_PATH, 'dim_mesorregiao.parquet'),
         'dim_uf': os.path.join(config_silver.DIM_OUT_PATH, 'dim_uf.parquet'),
+        'dim_cnae': os.path.join(config_silver.DIM_OUT_PATH, 'dim_cnae.parquet'),
     }
 
     # Leitura dos arquivos (se existirem)
@@ -45,6 +47,7 @@ def altera_tipos_regiao() -> None:
         'dim_microrregiao': {'id_microrregiao': 'string', 'id_mesorregiao': 'string'},
         'dim_mesorregiao': {'id_mesorregiao': 'string', 'id_uf': 'string'},
         'dim_uf': {'id_uf': 'string'},
+        'dim_cnae': {'secao': 'string'},
     }
 
     for name, df in dfs.items():
@@ -52,8 +55,3 @@ def altera_tipos_regiao() -> None:
         if conv:
             df = df.astype(conv)
         df.to_parquet(paths[name], index=False)
-
-#%%
-cria_dim_ano()
-cria_dim_cnae()
-altera_tipos_regiao()
