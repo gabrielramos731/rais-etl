@@ -4,7 +4,7 @@ import pandas as pd
 import time
 from layers.gold.utils.process_data import process_data
 from layers.gold.config.config_gold import PATH_ESTB_SILVER, PATH_ESTB_GOLD, DIM_PATH
-
+#%%
 def run_gold_layer() -> None:
     file_list = os.listdir(PATH_ESTB_SILVER)
     for file_name in file_list:
