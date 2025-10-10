@@ -2,6 +2,7 @@
 import os
 import pandas as pd
 import fastparquet
+from layers.gold.utils.db_insertion import save_to_db
 
 def process_data(file_name, raw_path, out_path, dim_path) -> None:
     file_path = os.path.join(raw_path, file_name)
@@ -71,7 +72,7 @@ def calculate_idx_muni(df):
 
 
     # call db save here (another function file)
-    return ql_sec_muni
 
+    # save_to_db(ql_sec_muni, ql_div_muni)
 
 # %%
