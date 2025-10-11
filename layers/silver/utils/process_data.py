@@ -4,7 +4,6 @@ import sys
 import pandas as pd
 import fastparquet
 
-#%%
 def processa_dados(file_name, raw_path, out_path) -> pd.DataFrame:
     '''Recebe lista de arquivos parquet e identifica formato para processamento adequado'''
 
@@ -17,8 +16,6 @@ def processa_dados(file_name, raw_path, out_path) -> pd.DataFrame:
     elif num_cols == 3: # para csv
         df = transforma_csv(file_path)
     
-    # chamar aqui o link fato -> dimensão
-    # lonk_fato_dim()
     df.to_parquet(os.path.join(out_path, file_name), index=False, engine='fastparquet')
 
 def transforma_txt(path) -> pd.DataFrame:
@@ -40,6 +37,7 @@ def transforma_txt(path) -> pd.DataFrame:
 def transforma_csv(path) -> pd.DataFrame:
     '''Processa os dados parquet e normaliza os campos [cnae, id_municipio]'''
 
+
     df = pd.read_parquet(path)
     df.rename(columns={
         'cnae_2': 'classe',
@@ -48,4 +46,10 @@ def transforma_csv(path) -> pd.DataFrame:
     df['classe'] = df['classe'].astype(str).str.zfill(5)
     df['id_municipio'] = df['id_municipio'].astype('str').str[:6]
 
+    # se for arquivo ESTB2021, intercepta a leitura para remover '.0' no campo cnae_2
+    if 'ESTB2021' in os.path.basename(path).upper():
+        df['classe'] = df['classe'].str.replace('.0', '', regex=False)
+        df['classe'] = df['classe'].str.zfill(5)
+
     return df
+# %%

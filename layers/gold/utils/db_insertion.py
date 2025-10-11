@@ -24,30 +24,36 @@ def insert_dimensions() -> None:
     
     engine.dispose()
 
-def save_to_db(ql_sec_muni, ql_div_muni) -> None:
-    """Salva fatos calculados no banco"""
+def save_to_db(df1, df2, table_names) -> None:
+    """Salva fatos calculados no banco
+    
+    Args:
+        df1: DataFrame com dados da primeira tabela (seção)
+        df2: DataFrame com dados da segunda tabela (divisão)
+        table_names: Lista com nomes das tabelas [tabela_secao, tabela_divisao]
+    """
     engine = create_engine_connection()
     
-    # Salva fact_sec_muni
-    if ql_sec_muni is not None:
-        ql_sec_muni.to_sql(
-            name='fact_sec_muni',
+    # Salva primeira tabela (seção)
+    if df1 is not None and len(table_names) > 0:
+        df1.to_sql(
+            name=table_names[0],
             con=engine,
             schema='dimensional',
             if_exists='append',
             index=False
         )
-        print(f"✓ Inserido: fact_sec_muni ({len(ql_sec_muni)} registros)")
+        print(f"✓ Inserido: {table_names[0]} ({len(df1)} registros)")
     
-    # Salva fact_div_muni
-    if ql_div_muni is not None:
-        ql_div_muni.to_sql(
-            name='fact_div_muni',
+    # Salva segunda tabela (divisão)
+    if df2 is not None and len(table_names) > 1:
+        df2.to_sql(
+            name=table_names[1],
             con=engine,
             schema='dimensional',
             if_exists='append',
             index=False
         )
-        print(f"✓ Inserido: fact_div_muni ({len(ql_div_muni)} registros)")
+        print(f"✓ Inserido: {table_names[1]} ({len(df2)} registros)")
     
     engine.dispose()
