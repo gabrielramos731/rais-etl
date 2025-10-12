@@ -1,20 +1,74 @@
-# Bronze Layer
----
+# Bronze Layer - Camada de Ingestão
 
+## Visão Geral
 
-#### Realiza a primera etapa do ETL de dados do RAIS, processando os dados originais e conformando-os. Para essa primeira etapa, algumas considerações sobre os dados originais precisam ser consideradas devidas a fatores externos:
+A Bronze Layer realiza a primeira etapa do pipeline ETL, responsável pela ingestão e conformação inicial dos dados brutos da RAIS. Transforma arquivos em formatos heterogêneos em um formato padronizado.
 
-1. Os dados originais estão em formatos de arquivos e foram extarídos do [Ministério do Trabalho e Emprego](https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/estatisticas-trabalho/microdados-rais-e-caged) e da organização [Base de Dados](https://basedosdados.org/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=c3a5121e-f00d-41ff-b46f-bd26be8d4af3&utm_term=base%20de%20dados%20rais&utm_campaign=Conjuntos+de+dados+-+Gratuito&utm_source=adwords&utm_medium=ppc&hsa_acc=9488864076&hsa_cam=20482085189&hsa_grp=152721262276&hsa_ad=670746326631&hsa_src=g&hsa_tgt=kwd-427920687310&hsa_kw=base%20de%20dados%20rais&hsa_mt=b&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=20482085189&gbraid=0AAAAApsIj8xku07UiShCjgiTU1J8c5py0&gclid=CjwKCAjw89jGBhB0EiwA2o1OnwNx6h_pqBRqW-lRuqGoxTk8dbhr1UT-EZL9yoJV-166Cdp_jxeL3xoCU9AQAvD_BwE) que disponibiliza dados governamentais gratuitamente.
+## Objetivo
 
-2. Os dados de alguns anos específicos estão corrompidos quando acessados pelo site oficial do Ministério do Trabalho e Emprego, os quais foram extraídos da segunda fonte, fazendo com que os dados estejam inicialmente em dois formatos diferentes (txt e csv).
+Processar dados originais em formatos diferentes (TXT, CSV) e padronizá-los em Parquet, garantindo conformidade de tipos e estrutura consistente para as próximas camadas.
 
----
+## Fonte de Dados
 
-#### Nesta primeira etapa foi realizado os seguintes tratamentos:
+Os dados são extraídos de duas fontes:
 
-1. Configura os caminhos dos diretórios dos dados brutos e de saída
+1. **Ministério do Trabalho e Emprego** - Fonte oficial dos dados RAIS
+2. **Base dos Dados** - Dados governamentais disponibilizados em formato acessível
 
-2. Acessa e normaliza os arquivos de dados brutos
+> **Nota**: Alguns anos possuem arquivos corrompidos na fonte oficial, sendo necessário utilizar a segunda fonte. Por isso há arquivos em formatos diferentes.
 
-3. Salva os dados em formato parquet para conformidade de tipo de arquivo no diretório ```data/conformed/estabelecimentos```, agora prontos para serem utilizados na etapa silver
+## Processamento
 
+### Operações realizadas
+
+**Configuração de caminhos**
+- Define diretórios de entrada (dados brutos)
+- Define diretórios de saída (dados conformados)
+
+**Normalização de arquivos**
+- Leitura de arquivos TXT e CSV
+- Padronização de nomes de colunas
+- Conversão de tipos de dados
+- Adição de coluna `ano` baseada no nome do arquivo
+
+**Salvamento em Parquet**
+- Conversão para formato colunar comprimido
+- Armazenamento em `data/conformed/estabelecimentos/`
+
+### Transformações aplicadas
+
+- Renomeação: `'CNAE 2.0 Classe'` → `'cnae'`, `'Município'` → `'id_municipio'`
+- Normalização CNAE: Preenchimento com zeros à esquerda (5 dígitos)
+- Extração do ano do nome do arquivo
+- Padronização de tipos (strings, inteiros)
+
+## Estrutura
+
+```
+bronze_layer/
+├── config/
+│   └── config_bronze.py
+├── scripts/
+│   └── bronze_layer.py
+├── utils/
+│   └── file_normalizer.py
+└── data/
+    └── conformed/
+        └── estabelecimentos/
+```
+
+## Execução
+
+```bash
+# Execução padrão
+python -m layers.bronze.scripts.bronze_layer
+
+# Com paralelização (4 threads)
+python -m layers.bronze.scripts.bronze_layer 4
+```
+
+## Output
+
+Arquivos no formato `ESTB{ANO}.parquet` em `data/conformed/estabelecimentos/`
+
+Exemplo: `ESTB2007.parquet`, `ESTB2008.parquet`, ..., `ESTB2024.parquet`
