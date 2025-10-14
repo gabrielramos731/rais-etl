@@ -9,9 +9,7 @@ def main():
     """
     Executa o pipeline ETL completo: Bronze -> Silver -> Gold
     """
-    print("="*60)
     print("INICIANDO PIPELINE ETL - RAIS")
-    print("="*60)
     
     total_start = time.time()
     
@@ -55,7 +53,6 @@ def main():
     total_time = time.time() - total_start
     print("\n" + "="*60)
     print("PIPELINE ETL CONCLUÍDO COM SUCESSO")
-    print("="*60)
     print(f"Bronze Layer: {bronze_time:.2f}s")
     print(f"Silver Layer: {silver_time:.2f}s")
     print(f"Gold Layer:   {gold_time:.2f}s")
