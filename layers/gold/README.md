@@ -54,6 +54,17 @@ Para cada nível geográfico:
 3. Cálculo do QL nacional e estadual
 4. Persistência em PostgreSQL
 
+### Views Materializadas
+
+Ao final do processamento, são criadas 6 views materializadas e índices que facilitam e otimizam consultas analíticas e integração com APIs:
+
+1. **fact_sec_muni_mv**
+2. **fact_div_muni_mv**
+3. **fact_sec_micro_mv**
+4. **fact_div_micro_mv**
+5. **fact_sec_meso_mv**
+6. **fact_div_meso_mv**
+
 
 ## Estrutura
 
@@ -62,7 +73,8 @@ gold_layer/
 ├── config/
 │   └── config_gold.py
 ├── scripts/
-│   └── gold_layer.py
+│   ├── gold_layer.py
+│   └── create_materialized_views.py
 ├── utils/
 │   ├── process_data.py
 │   ├── db_config.py
@@ -105,6 +117,7 @@ Ordem de processamento:
 2. Criação de tabelas (dimensões e fatos)
 3. Carga de dimensões
 4. Processamento por ano (merge, cálculo, inserção)
+5. Criação de views materializadas e índices
 
 ## Output
 
@@ -114,6 +127,7 @@ Ordem de processamento:
 
 **Fatos**: Índices calculados para todos os anos, regiões e setores
 
+**Views Materializadas**: 6 views otimizadas para consultas analíticas
 
 ## Validações
 

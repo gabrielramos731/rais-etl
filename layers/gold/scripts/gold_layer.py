@@ -6,6 +6,7 @@ from layers.gold.utils.process_data import process_data
 from layers.gold.utils.db_start import create_database
 from layers.gold.utils.db_insertion import insert_dimensions
 from layers.gold.config.config_gold import PATH_ESTB_SILVER, PATH_ESTB_GOLD, DIM_PATH
+from layers.gold.scripts.create_materialized_views import create_all_materialized_views
 
 def run_gold_layer() -> None:
     """
@@ -16,6 +17,7 @@ def run_gold_layer() -> None:
     2. Inserting dimension data from Silver layer
     3. Processing each establishment file to calculate location quotients
     4. Saving analytical results to PostgreSQL database
+    5. Creating materialized views for optimized queries
     
     The Gold layer produces analytical metrics (Quociente Locacional) at three
     geographic levels: municipality, microregion, and mesoregion, comparing
@@ -29,17 +31,21 @@ def run_gold_layer() -> None:
         - Creates 'dimensional' schema in PostgreSQL
         - Processes files sequentially from PATH_ESTB_SILVER
         - Each file triggers parallel index calculation (municipality, micro, meso)
+        - Creates 6 materialized views with indexes for API queries
     """
     create_database()
     insert_dimensions()
+    
     file_list = os.listdir(PATH_ESTB_SILVER)
     for file_name in file_list:
         print(f"Processando: {file_name}")
         process_data(file_name, PATH_ESTB_SILVER, PATH_ESTB_GOLD, DIM_PATH)
+    create_all_materialized_views()
         
 if __name__ == "__main__":
     start_time = time.time()
     run_gold_layer()
     end_time = time.time()
     elapsed = end_time - start_time
+    
     print(f"Tempo total de execução: {elapsed:.2f} segundos")

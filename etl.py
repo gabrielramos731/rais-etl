@@ -9,13 +9,9 @@ def main():
     """
     Executa o pipeline ETL completo: Bronze -> Silver -> Gold
     """
-    print("INICIANDO PIPELINE ETL - RAIS")
-    
     total_start = time.time()
     
-    # Bronze Layer
     print("\n[1/3] Executando Bronze Layer...")
-    print("-"*60)
     bronze_start = time.time()
     try:
         run_bronze_layer()
@@ -25,9 +21,7 @@ def main():
         print(f"ERRO na Bronze Layer: {e}")
         sys.exit(1)
     
-    # Silver Layer
     print("\n[2/3] Executando Silver Layer...")
-    print("-"*60)
     silver_start = time.time()
     try:
         run_silver_layer()
@@ -37,9 +31,7 @@ def main():
         print(f"ERRO na Silver Layer: {e}")
         sys.exit(1)
     
-    # Gold Layer
     print("\n[3/3] Executando Gold Layer...")
-    print("-"*60)
     gold_start = time.time()
     try:
         run_gold_layer()
@@ -49,15 +41,11 @@ def main():
         print(f"ERRO na Gold Layer: {e}")
         sys.exit(1)
     
-    # Resumo final
     total_time = time.time() - total_start
-    print("\n" + "="*60)
-    print("PIPELINE ETL CONCLUÍDO COM SUCESSO")
     print(f"Bronze Layer: {bronze_time:.2f}s")
     print(f"Silver Layer: {silver_time:.2f}s")
     print(f"Gold Layer:   {gold_time:.2f}s")
     print(f"Total:        {total_time:.2f}s ({total_time/60:.1f} minutos)")
-    print("="*60)
 
 
 if __name__ == "__main__":
