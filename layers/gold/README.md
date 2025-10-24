@@ -65,6 +65,9 @@ Ao final do processamento, são criadas 6 views materializadas e índices que fa
 5. **fact_sec_meso_mv**
 6. **fact_div_meso_mv**
 
+## Diagrama
+
+![image](./img/rais%20-%20dimensional.png)
 
 ## Estrutura
 

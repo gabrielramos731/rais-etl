@@ -95,37 +95,6 @@ Executa todas as camadas sequencialmente com relatório de progresso:
 python etl.py
 ```
 
-Saída esperada:
-```
-============================================================
-INICIANDO PIPELINE ETL - RAIS
-============================================================
-
-[1/3] Executando Bronze Layer...
-------------------------------------------------------------
-Processando arquivos...
-Bronze Layer concluída em 1200.45 segundos
-
-[2/3] Executando Silver Layer...
-------------------------------------------------------------
-Criando dimensões...
-Silver Layer concluída em 850.32 segundos
-
-[3/3] Executando Gold Layer...
-------------------------------------------------------------
-Calculando índices...
-Gold Layer concluída em 980.15 segundos
-
-============================================================
-PIPELINE ETL CONCLUÍDO COM SUCESSO
-============================================================
-Bronze Layer: 1200.45s
-Silver Layer: 850.32s
-Gold Layer:   980.15s
-Total:        3030.92s (50.5 minutos)
-============================================================
-```
-
 **Opção 2: Execução por layer individual**
 
 Útil para reprocessamento ou debugging:
@@ -173,15 +142,6 @@ Níveis de agregação:
 - [Bronze Layer](layers/bronze/README.md)
 - [Silver Layer](layers/silver/README.md)
 - [Gold Layer](layers/gold/README.md)
-
-## Tecnologias
-
-- Python 3.12+
-- pandas
-- PostgreSQL
-- SQLAlchemy
-- fastparquet / pyarrow
-- concurrent.futures
 
 ## Autor
 
