@@ -43,11 +43,8 @@ def create_fact_sec_muni_mv(engine, schema: str = "dimensional"):
                     ON micro.id_mesorregiao = meso.id_mesorregiao
                 JOIN {schema}.dim_uf u
                     ON meso.id_uf = u.id_uf
-                INNER JOIN (
-                    SELECT DISTINCT secao, descricao_secao
-                    FROM {schema}.dim_cnae
-                ) dc
-                    ON f.secao = dc.secao::integer
+                JOIN {schema}.dim_cnae dc
+                    ON f.classe = dc.classe
             )
         """))
         conn.commit()
@@ -88,11 +85,8 @@ def create_fact_div_muni_mv(engine, schema: str = "dimensional"):
                     ON micro.id_mesorregiao = meso.id_mesorregiao
                 JOIN {schema}.dim_uf u
                     ON meso.id_uf = u.id_uf
-                INNER JOIN (
-                    SELECT DISTINCT divisao, descricao_divisao, secao, descricao_secao
-                    FROM {schema}.dim_cnae
-                ) dc
-                    ON f.divisao::varchar = dc.divisao
+                JOIN {schema}.dim_cnae dc
+                    ON f.classe = dc.classe
             )
         """))
         conn.commit()
@@ -127,11 +121,8 @@ def create_fact_sec_micro_mv(engine, schema: str = "dimensional"):
                     ON micro.id_mesorregiao = meso.id_mesorregiao
                 JOIN {schema}.dim_uf u
                     ON meso.id_uf = u.id_uf
-                INNER JOIN (
-                    SELECT DISTINCT secao, descricao_secao
-                    FROM {schema}.dim_cnae
-                ) dc
-                    ON f.secao = dc.secao::integer
+                JOIN {schema}.dim_cnae dc
+                    ON f.classe = dc.classe
             )
         """))
         conn.commit()
@@ -168,11 +159,8 @@ def create_fact_div_micro_mv(engine, schema: str = "dimensional"):
                     ON micro.id_mesorregiao = meso.id_mesorregiao
                 JOIN {schema}.dim_uf u
                     ON meso.id_uf = u.id_uf
-                INNER JOIN (
-                    SELECT DISTINCT divisao, descricao_divisao, secao, descricao_secao
-                    FROM {schema}.dim_cnae
-                ) dc
-                    ON f.divisao::varchar = dc.divisao
+                JOIN {schema}.dim_cnae dc
+                    ON f.classe = dc.classe
             )
         """))
         conn.commit()
@@ -203,11 +191,8 @@ def create_fact_sec_meso_mv(engine, schema: str = "dimensional"):
                     ON f.id_mesorregiao = meso.id_mesorregiao
                 JOIN {schema}.dim_uf u
                     ON meso.id_uf = u.id_uf
-                INNER JOIN (
-                    SELECT DISTINCT secao, descricao_secao
-                    FROM {schema}.dim_cnae
-                ) dc
-                    ON f.secao = dc.secao::integer
+                JOIN {schema}.dim_cnae dc
+                    ON f.classe = dc.classe
             )
         """))
         conn.commit()
@@ -240,11 +225,8 @@ def create_fact_div_meso_mv(engine, schema: str = "dimensional"):
                     ON f.id_mesorregiao = meso.id_mesorregiao
                 JOIN {schema}.dim_uf u
                     ON meso.id_uf = u.id_uf
-                INNER JOIN (
-                    SELECT DISTINCT divisao, descricao_divisao, secao, descricao_secao
-                    FROM {schema}.dim_cnae
-                ) dc
-                    ON f.divisao::varchar = dc.divisao
+                INNER JOIN {schema}.dim_cnae dc
+                    ON f.classe = dc.classe
             )
         """))
         conn.commit()

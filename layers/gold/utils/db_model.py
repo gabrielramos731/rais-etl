@@ -120,7 +120,7 @@ def create_facts(engine, schema):
                 id serial PRIMARY KEY,
                 ano int,
                 id_municipio varchar REFERENCES {schema}.dim_municipio(id_municipio),
-                secao integer,
+                classe varchar REFERENCES {schema}.dim_cnae(classe),
                 indice_muni_nac float,
                 indice_muni_est float
             )
@@ -131,7 +131,7 @@ def create_facts(engine, schema):
                 id serial PRIMARY KEY,
                 ano int,
                 id_municipio varchar REFERENCES {schema}.dim_municipio(id_municipio),
-                divisao integer,
+                classe varchar REFERENCES {schema}.dim_cnae(classe),
                 indice_muni_nac float,
                 indice_muni_est float
             )
@@ -142,7 +142,7 @@ def create_facts(engine, schema):
                 id serial PRIMARY KEY,
                 ano int,
                 id_microrregiao varchar REFERENCES {schema}.dim_microrregiao(id_microrregiao),
-                secao integer,
+                classe varchar REFERENCES {schema}.dim_cnae(classe),
                 indice_micro_nac float,
                 indice_micro_est float
             )
@@ -153,7 +153,7 @@ def create_facts(engine, schema):
                 id serial PRIMARY KEY,
                 ano int,
                 id_microrregiao varchar REFERENCES {schema}.dim_microrregiao(id_microrregiao),
-                divisao integer,
+                classe varchar REFERENCES {schema}.dim_cnae(classe),
                 indice_micro_nac float,
                 indice_micro_est float
             )
@@ -164,7 +164,7 @@ def create_facts(engine, schema):
                 id serial PRIMARY KEY,
                 ano int,
                 id_mesorregiao varchar REFERENCES {schema}.dim_mesorregiao(id_mesorregiao),
-                secao integer,
+                classe varchar REFERENCES {schema}.dim_cnae(classe),
                 indice_meso_nac float,
                 indice_meso_est float
             )
@@ -175,7 +175,7 @@ def create_facts(engine, schema):
                 id serial PRIMARY KEY,
                 ano int,
                 id_mesorregiao varchar REFERENCES {schema}.dim_mesorregiao(id_mesorregiao),
-                divisao integer,
+                classe varchar REFERENCES {schema}.dim_cnae(classe),
                 indice_meso_nac float,
                 indice_meso_est float
             )

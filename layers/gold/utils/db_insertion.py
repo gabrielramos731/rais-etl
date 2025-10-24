@@ -42,7 +42,7 @@ def insert_dimensions() -> None:
             if_exists='append',
             index=False
         )
-        print(f"✓ Inserido: {dim_name} ({len(dim)} registros)")
+        print(f"Inserido: {dim_name} ({len(dim)} registros)")
     
     engine.dispose()
 
@@ -77,7 +77,7 @@ def save_to_db(df1, df2, table_names) -> None:
             if_exists='append',
             index=False
         )
-        print(f"✓ Inserido: {table_names[0]} ({len(df1)} registros)")
+        print(f"Inserido: {table_names[0]} ({len(df1)} registros)")
     
     # Save second table (division)
     if df2 is not None and len(table_names) > 1:
@@ -88,6 +88,6 @@ def save_to_db(df1, df2, table_names) -> None:
             if_exists='append',
             index=False
         )
-        print(f"✓ Inserido: {table_names[1]} ({len(df2)} registros)")
+        print(f"Inserido: {table_names[1]} ({len(df2)} registros)")
     
     engine.dispose()

@@ -48,6 +48,7 @@ def cria_dim_cnae() -> None:
     dim['secao'] = dim['descricao_secao'].astype('category').cat.codes + 1
     dim['classe'] = dim['classe'].astype(str).str.zfill(5)
     dim['divisao'] = dim['divisao'].astype('str')
+    dim['descricao_divisao'] = dim['descricao_divisao'].astype('str').replace('\n', ' ')
 
     dim.to_parquet(os.path.join(config_silver.DIM_OUT_PATH, 'dim_cnae.parquet'), index=False)
 

@@ -151,6 +151,7 @@ def calculate_idx_muni(df):
     secao = ['secao']
     divisao = ['divisao']
 
+    # Cálculo para SEÇÃO
     numerador_sec_nac = df.groupby(['ano'] + id_cols + secao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_sec_nac = df.groupby(['ano'] + secao).size() / df.groupby(['ano']).size()
     
@@ -162,10 +163,12 @@ def calculate_idx_muni(df):
     ql_sec_muni_nac['indice_muni_nac'] = round(ql_sec_muni_nac['indice_muni_nac'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
     ql_sec_muni_est['indice_muni_est'] = round(ql_sec_muni_est['indice_muni_est'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
 
-    ql_sec_muni = pd.merge(ql_sec_muni_nac, ql_sec_muni_est, how='outer', on=['ano'] + id_cols + secao).drop(axis=1, columns=['id_uf'])
+    ql_sec_muni = pd.merge(ql_sec_muni_nac, ql_sec_muni_est, how='inner', on=['ano'] + id_cols + secao).drop(axis=1, columns=['id_uf'])
+    
+    secao_to_classe = df[['secao', 'classe']].drop_duplicates('secao')
+    ql_sec_muni = pd.merge(ql_sec_muni, secao_to_classe, on='secao', how='left').drop(columns=['secao'])
 
-    #------------------
-
+    # Cálculo para DIVISÃO
     numerador_div_nac = df.groupby(['ano'] + id_cols + divisao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_div_nac = df.groupby(['ano'] + divisao).size() / df.groupby(['ano']).size()
     
@@ -177,13 +180,14 @@ def calculate_idx_muni(df):
     ql_div_muni_nac['indice_muni_nac'] = round(ql_div_muni_nac['indice_muni_nac'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
     ql_div_muni_est['indice_muni_est'] = round(ql_div_muni_est['indice_muni_est'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
 
-    ql_div_muni = pd.merge(ql_div_muni_nac, ql_div_muni_est, how='outer', on=['ano'] + id_cols + divisao).drop(axis=1, columns=['id_uf'])
+    ql_div_muni = pd.merge(ql_div_muni_nac, ql_div_muni_est, how='inner', on=['ano'] + id_cols + divisao).drop(axis=1, columns=['id_uf'])
+    
+    divisao_to_classe = df[['divisao', 'classe']].drop_duplicates('divisao')
+    ql_div_muni = pd.merge(ql_div_muni, divisao_to_classe, on='divisao', how='left').drop(columns=['divisao'])
 
     #------------------
 
-    # print(ql_sec_muni.info())
-
-    # call db save here (another function file)
+    # Salva no banco
     tables = ['fact_sec_muni', 'fact_div_muni']
     save_to_db(ql_sec_muni, ql_div_muni, tables)
 
@@ -219,11 +223,11 @@ def calculate_idx_micro(df):
     secao = ['secao']
     divisao = ['divisao']
 
-    # Cálculo para seção - Nacional
+    # Cálculo para SEÇÃO - Nacional
     numerador_sec_nac = df.groupby(['ano'] + id_cols + secao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_sec_nac = df.groupby(['ano'] + secao).size() / df.groupby(['ano']).size()
     
-    # Cálculo para seção - Estadual
+    # Cálculo para SEÇÃO - Estadual
     numerador_sec_est = df.groupby(['ano'] + id_cols + secao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_sec_est = df.groupby(['ano'] + secao + ['id_uf']).size() / df.groupby(['ano', 'id_uf']).size()
 
@@ -232,13 +236,16 @@ def calculate_idx_micro(df):
     ql_sec_micro_nac['indice_micro_nac'] = round(ql_sec_micro_nac['indice_micro_nac'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
     ql_sec_micro_est['indice_micro_est'] = round(ql_sec_micro_est['indice_micro_est'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
 
-    ql_sec_micro = pd.merge(ql_sec_micro_nac, ql_sec_micro_est, how='outer', on=['ano'] + id_cols + secao).drop(axis=1, columns=['id_uf'])
+    ql_sec_micro = pd.merge(ql_sec_micro_nac, ql_sec_micro_est, how='inner', on=['ano'] + id_cols + secao).drop(axis=1, columns=['id_uf'])
+    
+    secao_to_classe = df[['secao', 'classe']].drop_duplicates('secao')
+    ql_sec_micro = pd.merge(ql_sec_micro, secao_to_classe, on='secao', how='left').drop(columns=['secao'])
 
-    # Cálculo para divisão - Nacional
+    # Cálculo para DIVISÃO - Nacional
     numerador_div_nac = df.groupby(['ano'] + id_cols + divisao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_div_nac = df.groupby(['ano'] + divisao).size() / df.groupby(['ano']).size()
     
-    # Cálculo para divisão - Estadual
+    # Cálculo para DIVISÃO - Estadual
     numerador_div_est = df.groupby(['ano'] + id_cols + divisao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_div_est = df.groupby(['ano'] + divisao + ['id_uf']).size() / df.groupby(['ano', 'id_uf']).size()
 
@@ -247,7 +254,10 @@ def calculate_idx_micro(df):
     ql_div_micro_nac['indice_micro_nac'] = round(ql_div_micro_nac['indice_micro_nac'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
     ql_div_micro_est['indice_micro_est'] = round(ql_div_micro_est['indice_micro_est'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
 
-    ql_div_micro = pd.merge(ql_div_micro_nac, ql_div_micro_est, how='outer', on=['ano'] + id_cols + divisao).drop(axis=1, columns=['id_uf'])
+    ql_div_micro = pd.merge(ql_div_micro_nac, ql_div_micro_est, how='inner', on=['ano'] + id_cols + divisao).drop(axis=1, columns=['id_uf'])
+    
+    divisao_to_classe = df[['divisao', 'classe']].drop_duplicates('divisao')
+    ql_div_micro = pd.merge(ql_div_micro, divisao_to_classe, on='divisao', how='left').drop(columns=['divisao'])
 
     # Salva no banco
     tables = ['fact_sec_micro', 'fact_div_micro']
@@ -284,11 +294,11 @@ def calculate_idx_meso(df):
     secao = ['secao']
     divisao = ['divisao']
 
-    # Cálculo para seção - Nacional
+    # Cálculo para SEÇÃO - Nacional
     numerador_sec_nac = df.groupby(['ano'] + id_cols + secao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_sec_nac = df.groupby(['ano'] + secao).size() / df.groupby(['ano']).size()
     
-    # Cálculo para seção - Estadual
+    # Cálculo para SEÇÃO - Estadual
     numerador_sec_est = df.groupby(['ano'] + id_cols + secao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_sec_est = df.groupby(['ano'] + secao + ['id_uf']).size() / df.groupby(['ano', 'id_uf']).size()
 
@@ -297,13 +307,16 @@ def calculate_idx_meso(df):
     ql_sec_meso_nac['indice_meso_nac'] = round(ql_sec_meso_nac['indice_meso_nac'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
     ql_sec_meso_est['indice_meso_est'] = round(ql_sec_meso_est['indice_meso_est'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
 
-    ql_sec_meso = pd.merge(ql_sec_meso_nac, ql_sec_meso_est, how='outer', on=['ano'] + id_cols + secao).drop(axis=1, columns=['id_uf'])
+    ql_sec_meso = pd.merge(ql_sec_meso_nac, ql_sec_meso_est, how='inner', on=['ano'] + id_cols + secao).drop(axis=1, columns=['id_uf'])
+    
+    secao_to_classe = df[['secao', 'classe']].drop_duplicates('secao')
+    ql_sec_meso = pd.merge(ql_sec_meso, secao_to_classe, on='secao', how='left').drop(columns=['secao'])
 
-    # Cálculo para divisão - Nacional
+    # Cálculo para DIVISÃO - Nacional
     numerador_div_nac = df.groupby(['ano'] + id_cols + divisao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_div_nac = df.groupby(['ano'] + divisao).size() / df.groupby(['ano']).size()
     
-    # Cálculo para divisão - Estadual
+    # Cálculo para DIVISÃO - Estadual
     numerador_div_est = df.groupby(['ano'] + id_cols + divisao).size() / df.groupby(['ano'] + id_cols).size()
     denominador_div_est = df.groupby(['ano'] + divisao + ['id_uf']).size() / df.groupby(['ano', 'id_uf']).size()
 
@@ -312,7 +325,10 @@ def calculate_idx_meso(df):
     ql_div_meso_nac['indice_meso_nac'] = round(ql_div_meso_nac['indice_meso_nac'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
     ql_div_meso_est['indice_meso_est'] = round(ql_div_meso_est['indice_meso_est'].replace([float('inf'), -float('inf')], 0).fillna(0), 3)
 
-    ql_div_meso = pd.merge(ql_div_meso_nac, ql_div_meso_est, how='outer', on=['ano'] + id_cols + divisao).drop(axis=1, columns=['id_uf'])
+    ql_div_meso = pd.merge(ql_div_meso_nac, ql_div_meso_est, how='inner', on=['ano'] + id_cols + divisao).drop(axis=1, columns=['id_uf'])
+    
+    divisao_to_classe = df[['divisao', 'classe']].drop_duplicates('divisao')
+    ql_div_meso = pd.merge(ql_div_meso, divisao_to_classe, on='divisao', how='left').drop(columns=['divisao'])
 
     # Salva no banco
     tables = ['fact_sec_meso', 'fact_div_meso']
